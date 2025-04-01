@@ -42,6 +42,13 @@ class WeatherService:
         response.raise_for_status()
 
         data = response.json()
+
+        if not data:
+            raise ValueError(
+                "There is no data for this specific city. Are you sure "
+                "you wrote the correct city name?"
+            )
+
         latitude = data[0]["lat"]
         longitude = data[0]["lon"]
 
