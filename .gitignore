@@ -126,8 +126,4 @@ static/admin
 fast_tries.py
 .ruff_cache
 base_texts.txt
-data/web/media/condo_me/common_areas
-data/web/media/condo_me/condominiums
-data/web/media/condo_me/users
-
 
