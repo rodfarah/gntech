@@ -1,0 +1,34 @@
+services:
+  djangoapp:
+    container_name: djangoapp
+    build: 
+      context: .
+      args:
+        - UID=1000
+        - GID=1000
+    ports:
+      - 8000:8000
+    volumes:
+      - ./src:/app/src
+    user: "django_user"
+    environment:
+      - DJANGO_SETTINGS_MODULE=project.settings
+      - PYTHONPATH=/app/src
+    env_file:
+      - ./.env
+    depends_on:
+      - psql
+    working_dir: /app/src
+
+  psql:
+    container_name: psql
+    image: postgres:13-alpine
+    volumes:
+      - ./data/postgres/data:/var/lib/postgresql/data/
+    env_file:
+      - ./.env
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
