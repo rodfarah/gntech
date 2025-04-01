@@ -8,3 +8,5 @@ class WeatherData(models.Model):
 
     class Meta:
         ordering = ["-time"]
+        verbose_name = "Weather Data"
+        verbose_name_plural = "Weather Data"
