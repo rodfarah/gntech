@@ -1,11 +1,15 @@
 """
 Services to consume OpenWeather API data
-Please, notice that OpenWeather demands city geo coordinates and not city names. So
-we have to obtain the city geo coordinates first and then we may get weather data.
+Please, notice that OpenWeather demands city geo coordinates and not city names. It
+is mandatory to obtain the city geo coordinates first and then we may get weather data.
 """
+
+from datetime import datetime
 
 import requests
 from django.conf import settings
+
+from .models import WeatherData
 
 
 class WeatherService:
@@ -68,6 +72,8 @@ class WeatherService:
             HTTPError: If the API request fails.
         """
 
+        current_time = datetime.now()
+
         lat_and_lon = self.get_city_geo_coordinates(city)
 
         params = {
@@ -85,5 +91,11 @@ class WeatherService:
 
         data = response.json()
         current_temperature = data["main"]["temp"]
+
+        # insert object inside PostgreSQL DB
+
+        WeatherData.objects.create(
+            city=city, temperature=current_temperature, time=current_time
+        )
 
         return current_temperature
