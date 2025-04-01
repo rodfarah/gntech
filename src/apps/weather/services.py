@@ -24,11 +24,59 @@ class WeatherService:
         """
         OpenWeather uses Geocoding API in order to obtain geo coordinates for a specific
         city.
+
+        Args:
+        city (str): Name of the city in English.
+
+        Returns:
+        tuple: A tuple containing (latitude, longitude) as float values.
+
         Please, check for further details:
         https://openweathermap.org/api/geocoding-api
         """
-        params = {"city name": city, "appid": self.api_key, "limit": 1}
+        params = {"q": city, "appid": self.api_key, "limit": 1}
 
         response = requests.get(url=self.url_coordinates_base_structure, params=params)
 
-        return response.json()
+        # raises exception if applicable
+        response.raise_for_status()
+
+        data = response.json()
+        latitude = data[0]["lat"]
+        longitude = data[0]["lon"]
+
+        return latitude, longitude
+
+    def get_current_temperature(self, city):
+        """
+        Retrieves the current temperature for a specified city.
+        The method first obtains geographical coordinates for the city, then makes a
+        request to the OpenWeatherMap API to get current weather data. The temperature
+        is returned in Celsius.
+        Args:
+            city (str): The name of the city to get the temperature for.
+        Returns:
+            float: The current temperature in Celsius.
+        Raises:
+            HTTPError: If the API request fails.
+        """
+
+        lat_and_lon = self.get_city_geo_coordinates(city)
+
+        params = {
+            "lat": lat_and_lon[0],
+            "lon": lat_and_lon[1],
+            "appid": self.api_key,
+            "units": "metric",  # Celsius
+            "lang": "pt_br",
+        }
+
+        response = requests.get(url=self.url_weather_base_stucture, params=params)
+
+        # raises exception if applicable
+        response.raise_for_status()
+
+        data = response.json()
+        current_temperature = data["main"]["temp"]
+
+        return current_temperature
