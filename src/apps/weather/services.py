@@ -30,7 +30,7 @@ class WeatherService:
         city.
 
         Args:
-        city (str): Name of the city in English.
+        city (str): Name of the city written in English.
 
         Returns:
         tuple: A tuple containing (latitude, longitude) as float values.
@@ -74,6 +74,7 @@ class WeatherService:
 
         current_time = datetime.now()
 
+        # obtain coordinates for city
         lat_and_lon = self.get_city_geo_coordinates(city)
 
         params = {
@@ -93,7 +94,6 @@ class WeatherService:
         current_temperature = data["main"]["temp"]
 
         # insert object inside PostgreSQL DB
-
         WeatherData.objects.create(
             city=city, temperature=current_temperature, time=current_time
         )
