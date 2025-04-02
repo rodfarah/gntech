@@ -24,7 +24,7 @@ class WeatherService:
             "https://api.openweathermap.org/data/2.5/weather"
         )
 
-    def get_city_geo_coordinates(self, city):
+    def get_city_geo_coordinates(self, city: str):
         """
         OpenWeather uses Geocoding API in order to obtain geo coordinates for a specific
         city.
@@ -58,7 +58,7 @@ class WeatherService:
 
         return latitude, longitude
 
-    def get_current_temperature(self, city):
+    def get_current_temperature(self, city: str):
         """
         Retrieves the current temperature for a specified city.
         The method first obtains geographical coordinates for the city, then makes a

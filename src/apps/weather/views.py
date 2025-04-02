@@ -72,7 +72,7 @@ class GetTemperatureByCity(APIView):
         },
         description="Retrieves the current temperature for the specific city",
     )
-    def get(self, request, city=None):
+    def get(self, request, city: str):
         try:
             weather_service = WeatherService()
             current_weather = weather_service.get_current_temperature(city=city)
