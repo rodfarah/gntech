@@ -132,6 +132,7 @@ class TemperatureByCityListView(generics.ListAPIView):
 
     queryset = models.WeatherData.objects.all()
     serializer_class = serializer.WeatherDataSerializer
+    pagination_class = StandardPagination
 
     def get_queryset(self):
         city_name = self.kwargs.get("city_name")
