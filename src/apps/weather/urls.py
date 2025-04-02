@@ -1,3 +1,8 @@
+"""
+Only ADMIN person may retrieve data from OpenWeather API using the API endpoints
+bellow.
+"""
+
 from django.urls import path
 
 from . import views
