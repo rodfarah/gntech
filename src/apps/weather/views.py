@@ -1,4 +1,4 @@
-from drf_spectacular.utils import OpenApiExample, OpenApiParameter, extend_schema
+from drf_spectacular.utils import OpenApiParameter, extend_schema
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -68,7 +68,7 @@ class GetTemperatureByCity(APIView):
     def get(self, request, city=None):
         try:
             weather_service = WeatherService()
-            weather_service.get_current_temperature(city=city)
+            current_weather = weather_service.get_current_temperature(city=city)
 
             return Response(
                 {
@@ -76,6 +76,7 @@ class GetTemperatureByCity(APIView):
                     "moment, as well as the insertion of the data into the database, "
                     "were successfully performed.",
                     "city": city,
+                    "temperature": current_weather,
                 },
                 status=status.HTTP_200_OK,
             )
