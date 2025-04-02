@@ -30,7 +30,7 @@ class GetTemperatureByCity(APIView):
     """
 
     @extend_schema(
-        summary="An admin may get current temperature for a specific city",
+        summary="An admin user may get current temperature for a specific city",
         parameters=[
             OpenApiParameter(
                 name="city",
@@ -46,21 +46,28 @@ class GetTemperatureByCity(APIView):
                 "properties": {
                     "message": {"type": "string"},
                     "city": {"type": "string"},
+                    "temperature": {"type": "number", "format": "float"},
                 },
                 "example": {
-                    "message": "The retrieval of the city's temperature was successful",
+                    "message": "The retrieval of the city's temperature at the exact "
+                    "moment, as well as the insertion of the data into the database, "
+                    "were successfully performed.",
                     "city": "São Paulo",
+                    "temperature": 23.5,
                 },
             },
             404: {
                 "type": "object",
                 "properties": {"error": {"type": "string"}},
-                "example": {"error": "City not found"},
+                "example": {
+                    "error": "There is no data for this specific city. Are you sure you"
+                    " wrote the correct city name?"
+                },
             },
             500: {
                 "type": "object",
                 "properties": {"error": {"type": "string"}},
-                "example": {"error": "An unexpected server error occurred"},
+                "example": {"error": "An unexpected error occurred: Connection error"},
             },
         },
         description="Retrieves the current temperature for the specific city",
