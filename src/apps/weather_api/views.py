@@ -61,7 +61,8 @@ class TemperatureListView(generics.ListAPIView):
     """
     A view to retrieve a paginated list of temperature data.
     This view handles GET requests to display a list of all weather data entries,
-    serialized using WeatherDataSerializer and paginated according to StandardPagination.
+    serialized using WeatherDataSerializer and paginated according to
+    StandardPagination.
     Attributes:
         queryset: Retrieves all WeatherData objects from the database.
         serializer_class: Uses WeatherDataSerializer to convert model instances to JSON.
@@ -118,7 +119,17 @@ class TemperatureListView(generics.ListAPIView):
         )
     ],
 )
-class TemperatureByCityDetailView(generics.ListAPIView):
+class TemperatureByCityListView(generics.ListAPIView):
+    """
+    A view that returns a list of temperature data for a specific city.
+    This view extends Django Rest Framework's ListAPIView to provide a RESTful API
+    endpoint that retrieves all weather data records associated with a specified city
+    name.
+    URL pattern: Expects a 'city_name' parameter in the URL to filter weather data.
+    Returns:
+        A JSON response containing all weather records for the specified city.
+    """
+
     queryset = models.WeatherData.objects.all()
     serializer_class = serializer.WeatherDataSerializer
 

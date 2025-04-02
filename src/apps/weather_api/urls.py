@@ -18,7 +18,7 @@ urlpatterns = [
     # Lists all weather data objects available in DB, for a specific city.
     path(
         "temperatures/by-city/<str:city_name>/",
-        views.TemperatureByCityDetailView.as_view(),
+        views.TemperatureByCityListView.as_view(),
         name="temperature_by_city",
     ),
 ]
