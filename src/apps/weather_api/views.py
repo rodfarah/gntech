@@ -58,6 +58,16 @@ from .paginator import StandardPagination
     ],
 )
 class TemperatureListView(generics.ListAPIView):
+    """
+    A view to retrieve a paginated list of temperature data.
+    This view handles GET requests to display a list of all weather data entries,
+    serialized using WeatherDataSerializer and paginated according to StandardPagination.
+    Attributes:
+        queryset: Retrieves all WeatherData objects from the database.
+        serializer_class: Uses WeatherDataSerializer to convert model instances to JSON.
+        pagination_class: Implements StandardPagination for the response.
+    """
+
     queryset = models.WeatherData.objects.all()
     serializer_class = serializer.WeatherDataSerializer
     pagination_class = StandardPagination
