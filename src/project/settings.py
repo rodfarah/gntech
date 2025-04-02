@@ -48,7 +48,23 @@ INSTALLED_APPS = [
     # My Apps
     "apps.weather",
     "apps.weather_api",
+    # for API reference and Documentation
+    "drf_spectacular",
 ]
+
+# DRF Spectacular Setup
+REST_FRAMEWORK = {
+    # ... suas configurações existentes
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+}
+
+SPECTACULAR_SETTINGS = {
+    "TITLE": "Weather API",
+    "DESCRIPTION": "gntech test for a job position. API for retrieving and storing "
+    "weather data",
+    "VERSION": "1.0.0",
+    "SERVE_INCLUDE_SCHEMA": False,
+}
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",

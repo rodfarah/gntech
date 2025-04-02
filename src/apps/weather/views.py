@@ -1,3 +1,4 @@
+from drf_spectacular.utils import OpenApiExample, OpenApiParameter, extend_schema
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -28,6 +29,42 @@ class GetTemperatureByCity(APIView):
         - 500 Internal Server Error: An unexpected error occurred.
     """
 
+    @extend_schema(
+        summary="An admin may get current temperature for a specific city",
+        parameters=[
+            OpenApiParameter(
+                name="city",
+                description="City Name (in English)",
+                required=True,
+                type=str,
+                location=OpenApiParameter.PATH,
+            )
+        ],
+        responses={
+            200: {
+                "type": "object",
+                "properties": {
+                    "message": {"type": "string"},
+                    "city": {"type": "string"},
+                },
+                "example": {
+                    "message": "The retrieval of the city's temperature was successful",
+                    "city": "São Paulo",
+                },
+            },
+            404: {
+                "type": "object",
+                "properties": {"error": {"type": "string"}},
+                "example": {"error": "City not found"},
+            },
+            500: {
+                "type": "object",
+                "properties": {"error": {"type": "string"}},
+                "example": {"error": "An unexpected server error occurred"},
+            },
+        },
+        description="Retrieves the current temperature for the specific city",
+    )
     def get(self, request, city=None):
         try:
             weather_service = WeatherService()
