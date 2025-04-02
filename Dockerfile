@@ -39,7 +39,7 @@ RUN chmod +x $APP_HOME/docker-scripts/commands.sh
 
 # Installing dependencies with Poetry, without creating a virtual environment
 RUN poetry config virtualenvs.create false \
-    && poetry install --no-interaction --no-ansi || true
+    && poetry install --no-interaction --no-ansi
 
 # Setting the non-root user for container (commands.sh) execution
 USER $USER
