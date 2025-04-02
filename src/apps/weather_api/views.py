@@ -61,3 +61,58 @@ class TemperatureListView(generics.ListAPIView):
     queryset = models.WeatherData.objects.all()
     serializer_class = serializer.WeatherDataSerializer
     pagination_class = StandardPagination
+
+
+@extend_schema(
+    summary="Retrieve temperature records for a specific city",
+    description="Returns all temperature records for the specified city",
+    parameters=[
+        OpenApiParameter(
+            name="city_name",
+            description="Name of the city to filter by",
+            required=True,
+            type=str,
+            location=OpenApiParameter.PATH,
+        ),
+    ],
+    responses={200: serializer.WeatherDataSerializer(many=True)},
+    examples=[
+        OpenApiExample(
+            name="city_weather_data_example",
+            summary="Example city weather data",
+            description="Temperature records for a specific city",
+            value={
+                "count": 3,
+                "next": None,
+                "previous": None,
+                "results": [
+                    {
+                        "city": "São Paulo",
+                        "temperature": 23.5,
+                        "time": "2025-04-01T14:30:00Z",
+                    },
+                    {
+                        "city": "São Paulo",
+                        "temperature": 22.8,
+                        "time": "2025-04-01T13:30:00Z",
+                    },
+                    {
+                        "city": "São Paulo",
+                        "temperature": 24.2,
+                        "time": "2025-04-01T12:30:00Z",
+                    },
+                ],
+            },
+            response_only=True,
+            status_codes=["200"],
+        )
+    ],
+)
+class TemperatureByCityDetailView(generics.ListAPIView):
+    queryset = models.WeatherData.objects.all()
+    serializer_class = serializer.WeatherDataSerializer
+
+    def get_queryset(self):
+        city_name = self.kwargs.get("city_name")
+        queryset = models.WeatherData.objects.filter(city=city_name)
+        return queryset
