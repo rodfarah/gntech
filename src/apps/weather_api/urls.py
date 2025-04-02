@@ -1,5 +1,5 @@
 """
-Any user may retrieve data from this API endpoints
+Any user may retrieve data from database using this API endpoints
 """
 
 from django.urls import path
@@ -9,12 +9,13 @@ from . import views
 app_name = "weather_api"
 
 urlpatterns = [
-    # List of all temperature objects available in DB
+    # Lists all wheather data objects available in DB, for all requested cities.
     path(
         "temperatures/all-records/",
         views.TemperatureListView.as_view(),
         name="all_temperature_list",
     ),
+    # Lists all weather data objects available in DB, for a specific city.
     path(
         "temperatures/by-city/<str:city_name>/",
         views.TemperatureByCityDetailView.as_view(),

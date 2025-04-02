@@ -10,8 +10,8 @@ from . import views
 app_name = "weather"
 
 urlpatterns = [
-    # TEMPERATURE API PATHS
-    # List of all temperature objects available in DB
+    # The following path will retrieve weather data for a specific city,
+    # from OpenWeather API
     path(
         "get-temperature/<str:city>",
         views.GetTemperatureByCity.as_view(),
