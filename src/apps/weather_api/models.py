@@ -1,1 +1,1 @@
-from apps.weather.models import WeatherData
+from apps.weather.models import WeatherData  # noqa: F401
