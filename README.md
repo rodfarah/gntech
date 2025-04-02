@@ -1,96 +1,180 @@
-# Weather API Project
+# Weather Data API
 
-## Overview
-This project provides weather data through a REST API, fetching information from the OpenWeather API and storing it in a PostgreSQL database. The application is containerized using Docker for easy deployment and setup.
+This project provides a RESTful API for fetching, storing, and retrieving temperature data for cities around the world. It uses Django with PostgreSQL, containerized with Docker for easy deployment and development.
 
 ## Features
-- Real-time temperature queries by city name
-- API endpoints for retrieving stored weather data
-- Data storage in PostgreSQL database
-- Fully containerized setup with Docker
-- API documentation using drf-spectacular
-- Admin interface for manual data management
 
-## Tech Stack
-- Django 5.1
-- Django REST Framework
-- PostgreSQL
-- Docker & Docker Compose
-- drf-spectacular for API documentation
+- Fetch current temperature data from OpenWeather API for any valid city name (Only ADMIN users should have access)
+- City names must be provided in English and must exist in the OpenWeather database
+- Automatically store temperature data in PostgreSQL database
+- RESTful API to access stored temperature information (Any user should have access)
+- Interactive API documentation with Swagger/ReDoc
+- Docker containerization for consistent development and deployment
 
-## Project Structure
-```
-src/
-├── apps/
-│   ├── weather/              # App for collecting weather data (Admin only)
-│   │   ├── models.py         # WeatherData model
-│   │   ├── services.py       # Service to interact with OpenWeather API
-│   │   ├── urls.py           # URLs for admin operations
-│   │   └── views.py          # Views for admin operations
-│   │
-│   └── weather_api/          # App for REST API endpoints to retrieve data from Postgres Database
-│       ├── urls.py           # API endpoints
-│       └── views.py          # API views for data retrieval
-│
-├── project/                  # Django project settings
-└── manage.py                 # Django management script
-```
+## Prerequisites
+
+- [Docker](https://docs.docker.com/get-docker/) and [Docker Compose](https://docs.docker.com/compose/install/)
+- [Make](https://www.gnu.org/software/make/) (optional, for using Makefile commands)
+- OpenWeather API key (I will send it to gntech via e-mail)
 
 ## Installation and Setup
 
-### Prerequisites
-- Docker and Docker Compose
-- OpenWeather API key
+### 1. Clone the repository
 
-### Setup Steps
-
-1. Clone the repository
-   ```bash
-   git clone https://github.com/rodfarah/gntech.git
-   cd weather-api
-   ```
-
-2. Create a .env file based on .env-example file:
-
-3. Run the following command in order to build containers and install the application:
-   ```bash
-   # First, make the script executable
-   chmod +x start.sh
-   
-   # Then run it
-   ./start.sh 
-   # you will need to insert sudo password in order to execute operations. 
-
-
-4. The application should now be running at:
-   - API: http://localhost:8000/api/
-   - API Documentation: http://localhost:8000/api/docs/
-   - Admin interface: http://localhost:8000/admin/
-
-## API Endpoints
-
-### Weather Data Retrieval
-- **GET /api/temperatures/all-records/**  
-  Retrieve all temperature records in the database
-
-- **GET /api/temperatures/by-city/{city_name}/**  
-  Retrieve all temperature records for a specific city
-
-### Weather Data Collection (Admin Only)
-- **GET /api/admin/temperature/{city}/**  
-  Fetch current temperature for a city from OpenWeather and store it in the database
-
-## Development
-
-### Running Tests
 ```bash
-python manage.py test
+git clone https://github.com/rodfarah/gntech.git>
+cd gntech
 ```
 
-## License
-MIT License
+### 2. Configure environment variables
 
-Copyright (c) 2025 Rodrigo Farah
+Create a .env file in the root directory with the same variables deffined in .env-example file
+
+### 3. Build and start the application
+
+Using Make:
+```bash
+make up
+```
+
+Or using Docker Compose directly:
+```bash
+docker compose up --build
+```
+
+The application will be available at http://localhost:8000
+
+## Project Structure
+
+```
+gntech/
+├── docker-scripts/       # Scripts for Docker container
+│   └── commands.sh       # Container startup script
+├── src/                  # Django project source code
+│   ├── apps/             # Django applications
+│   │   ├── weather/      # Weather data collection
+│   │   └── weather_api/  # API endpoints
+│   └── project/          # Django project settings
+├── .env                  # Environment variables (create this file)
+├── docker-compose.yml    # Docker Compose configuration
+├── Dockerfile            # Docker container definition
+├── Makefile              # Make commands for common operations
+├── poetry.lock           # Poetry lock file
+├── pyproject.toml        # Poetry project definition
+└── pytest.ini           # pytest configuration
+```
+
+## Django Applications Structure
+
+The project is divided into two Django applications, each with a specific responsibility following the single responsibility principle:
+
+### 1. Weather Data Collection (`apps.weather`)
+
+This application is responsible for fetching data from the OpenWeather API and storing it in the database.
+Only a ADMIN user should have access to this features.
+
+#### Key Components:
+
+- **Models**: Defines the `WeatherData` model that stores city, temperature, and timestamp information
+- **Services**: Contains the `WeatherService` class that handles API communication with OpenWeather
+- **Views**: Provides admin-only endpoints for triggering data collection for specific cities
+- **URLs**: Routes for admin operations (`/api/admin/get-temperature/{city}/`)
+
+#### Features:
+
+- Fetches real-time temperature data from OpenWeather API
+- Validates and processes the incoming data
+- Stores temperature records in the PostgreSQL database
+- Handles API connection errors gracefully
+- Admin-only access for data collection operations
+
+### 2. Weather API (`apps.weather_api`)
+
+This application exposes REST endpoints to retrieve the weather data stored in the database.
+Any user should have access to this features.
+
+#### Key Components:
+
+- **Views**: Defines views for listing and filtering temperature data
+- **Serializers**: Handles the conversion of database objects to JSON responses
+- **URLs**: Defines public API endpoints (`/api/temperatures/all-records/`, `/api/temperatures/by-city/{city_name}/`)
+- **Tests**: Includes test cases for the API endpoints
+
+#### Features:
+
+- Browsable REST API with filtering capabilities
+- Pagination support for large datasets
+- Properly formatted JSON responses
+- API documentation via Swagger/ReDoc
+- Public access for data retrieval
+
+### Interaction Between Apps
+
+The applications work together as follows:
+
+1. `weather` app collects data from OpenWeather and populates the database
+2. `weather_api` app provides read-only access to this data through RESTful endpoints
+3. Both apps share the same database models but have different responsibilities
+
+This separation of concerns makes the codebase more maintainable, testable, and allows for independent scaling of the data collection and API serving components.
+
+
+## Available Commands
+
+The project includes a Makefile with the following commands:
+
+```bash
+# Start the containers (build if needed)
+make up
+
+# Stop the containers
+make down
+
+# Build Docker images
+make build
+```
+
+## Running Tests
+
+To run the tests:
+
+```bash
+# Execute tests inside the Django container
+docker exec -it djangoapp poetry run pytest
+```
+
+For specific test files:
+
+```bash
+docker exec -it djangoapp poetry run python /app/src/manage.py test apps.weather_api
+```
+
+## Container Architecture
+
+The project uses two Docker containers:
+
+1. **djangoapp**: Python 3.10 with Django application
+   - Uses Poetry for dependency management
+   - Runs as non-root user for security
+   - Waits for PostgreSQL to be available before starting
+
+2. **psql**: PostgreSQL 13 database
+   - Uses persistent volume for data storage
+   - Configured with environment variables from .env file
+
+## Development Flow
+
+1. Make changes to the source code in the src directory
+2. Changes are automatically reflected due to volume mounting
+3. For dependency changes, rebuild the container with `make build`
+4. Access the admin interface at http://localhost:8000/admin/
+5. Access the API at http://localhost:8000/api/
+6. View API documentation at http://localhost:8000/api/docs/
+
+## MIT License
+
+```
+Copyright (c) 2025 Rodrigo Lagrotta Silva Farah
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -109,6 +193,4 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
-
-## Author
-Rodrigo Farah (digofarah@gmail.com)
+```
