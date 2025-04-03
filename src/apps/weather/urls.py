@@ -13,7 +13,7 @@ urlpatterns = [
     # The following path will retrieve weather data for a specific city,
     # from OpenWeather API
     path(
-        "get-temperature/<str:city>",
+        "v1/get-temperature/<str:city>",
         views.GetTemperatureByCity.as_view(),
         name="get_current_temperature_by_city",
     )

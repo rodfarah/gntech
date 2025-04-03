@@ -78,7 +78,7 @@ Only a ADMIN user should have access to this features.
 - **Models**: Defines the `WeatherData` model that stores city, temperature, and timestamp information
 - **Services**: Contains the `WeatherService` class that handles API communication with OpenWeather
 - **Views**: Provides admin-only endpoints for triggering data collection for specific cities
-- **URLs**: Routes for admin operations (`/api/admin/get-temperature/{city}/`)
+- **URLs**: Routes for admin operations (`/api/admin/v1/get-temperature/{city}/`)
 
 #### Features:
 
@@ -97,7 +97,7 @@ Any user should have access to this features.
 
 - **Views**: Defines views for listing and filtering temperature data
 - **Serializers**: Handles the conversion of database objects to JSON responses
-- **URLs**: Defines public API endpoints (`/api/temperatures/all-records/`, `/api/temperatures/by-city/{city_name}/`)
+- **URLs**: Defines public API endpoints (`/api/v1/temperatures/all-records/`, `/api/v1/temperatures/by-city/{city_name}/`)
 - **Tests**: Includes test cases for the API endpoints
 
 #### Features:
@@ -168,8 +168,7 @@ The project uses two Docker containers:
 2. Changes are automatically reflected due to volume mounting
 3. For dependency changes, rebuild the container with `make build`
 4. Access the admin interface at http://localhost:8000/admin/
-5. Access the API at http://localhost:8000/api/
-6. View API documentation at http://localhost:8000/api/docs/
+5. View API documentation at http://localhost:8000/api/docs/
 
 ## MIT License
 

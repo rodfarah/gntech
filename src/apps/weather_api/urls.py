@@ -11,13 +11,13 @@ app_name = "weather_api"
 urlpatterns = [
     # Lists all wheather data objects available in DB, for all requested cities.
     path(
-        "temperatures/all-records/",
+        "v1/temperatures/all-records/",
         views.TemperatureListView.as_view(),
         name="all_temperature_list",
     ),
     # Lists all weather data objects available in DB, for a specific city.
     path(
-        "temperatures/by-city/<str:city_name>/",
+        "v1/temperatures/by-city/<str:city_name>/",
         views.TemperatureByCityListView.as_view(),
         name="temperature_by_city",
     ),
