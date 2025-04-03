@@ -18,10 +18,10 @@ log "✅ PostgreSQL is available at $POSTGRES_HOST:$POSTGRES_PORT"
 
 # Migrate database
 log "Applying database migrations..."
-poetry run python $APP_HOME/src/manage.py makemigrations --noinput
-poetry run python $APP_HOME/src/manage.py migrate --noinput
+python $APP_HOME/src/manage.py makemigrations --noinput
+python $APP_HOME/src/manage.py migrate --noinput
 log "✅ Database migrations completed."
 
 # Inicia o servidor Django
 log "Starting Django development server..."
-exec poetry run python $APP_HOME/src/manage.py runserver 0.0.0.0:8000
+python $APP_HOME/src/manage.py runserver 0.0.0.0:8000
