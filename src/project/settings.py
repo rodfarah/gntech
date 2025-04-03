@@ -33,6 +33,9 @@ ALLOWED_HOSTS = []
 # OpenWeather authentication data
 API_KEY = config("API_KEY")
 
+# OpenWeather Base Endpoints
+URL_COORDINATES_BASE_STRUCTURE = "http://api.openweathermap.org/geo/1.0/direct"
+URL_WEATHER_BASE_STRUCTURE = "https://api.openweathermap.org/data/2.5/weather"
 
 # Application definition
 

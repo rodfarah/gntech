@@ -32,7 +32,7 @@ from .paginator import StandardPagination
             description="A paginated list of weather data records",
             value={
                 "count": 25,
-                "next": "http://example.com/api/temperatures/?page=2",
+                "next": "http://example.com/api/v1/temperatures/?page=2",
                 "previous": None,
                 "results": [
                     {

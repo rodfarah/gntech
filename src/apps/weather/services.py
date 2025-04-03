@@ -16,13 +16,9 @@ class WeatherService:
     def __init__(self) -> None:
         self.api_key = settings.API_KEY
         # to obtain geo coordinates for a specific city, using GeocodingAPI
-        self.url_coordinates_base_structure = (
-            "http://api.openweathermap.org/geo/1.0/direct"
-        )
+        self.url_coordinates_base_structure = settings.URL_COORDINATES_BASE_STRUCTURE
         # to obtain weather information for specific geo coordinates, using OpenWeather
-        self.url_weather_base_stucture = (
-            "https://api.openweathermap.org/data/2.5/weather"
-        )
+        self.url_weather_base_stucture = settings.URL_WEATHER_BASE_STRUCTURE
 
     def get_city_geo_coordinates(self, city: str):
         """
